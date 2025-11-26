@@ -7,6 +7,8 @@ import org.apache.lucene.document.KeywordField
 import org.apache.lucene.index.IndexableField
 import lumens.fields.{FieldDesc, ReadableFieldDesc}
 import lumens.fields.StoredFieldReader
+import org.apache.lucene.search.SortField
+import org.apache.lucene.search.SortedSetSelector
 
 trait KeywordFieldDesc extends FieldDesc[String]:
     def field(value: String): IndexableField =
@@ -14,6 +16,12 @@ trait KeywordFieldDesc extends FieldDesc[String]:
 
     def exact(value: String): Query =
         TermQuery(Term(name, value))
+
+    def ascending: SortField =
+        KeywordField.newSortField(name, false, SortedSetSelector.Type.MIN)
+
+    def descending: SortField =
+        KeywordField.newSortField(name, true, SortedSetSelector.Type.MAX)
 
 object KeywordFieldDesc:
     case class Transient(name: String) extends KeywordFieldDesc:
