@@ -1,13 +1,11 @@
 package lumens.query
 
-import org.apache.lucene.search.Query as LQuery
-import org.apache.lucene.search.BooleanQuery
-import org.apache.lucene.search.BooleanClause
-import lumens.query.Query.bool
+import lumens.query.QueryIntent
+import lumens.internal.MonadError
+import scala.collection.Factory
+import org.apache.lucene.search.IndexSearcher
 
-extension (query: LQuery)
-    def &&(other: LQuery): BooleanQueryBuilder =
-        bool.must(query, other)
-
-    def ||(other: LQuery): BooleanQueryBuilder =
-        bool.should(query, other)
+extension [C[_], A](intent: QueryIntent[C, A])
+    /** Runs the query and returns the results in the given F. */
+    def run[F[_]](searcher: IndexSearcher)(using F: MonadError[F]): F[intent.Output] =
+        QueryRun[F](searcher).execute(intent)

@@ -2,7 +2,7 @@ package lumens.fields
 
 import org.apache.lucene.index.IndexableField
 import org.apache.lucene.document.FloatField
-import org.apache.lucene.search.Query
+import lumens.query.Query
 import org.apache.lucene.search.SortField
 import org.apache.lucene.document.Document
 import org.apache.lucene.search.SortedNumericSelector
@@ -12,10 +12,10 @@ trait FloatFieldDesc[Name <: String, A] extends FieldDesc[Name, A, Float]:
         FloatField(name, value, store)
 
     def exact(value: A): Query =
-        FloatField.newExactQuery(name, forward(value))
+        Query.of(FloatField.newExactQuery(name, forward(value)))
 
     def range(min: A, max: A): Query =
-        FloatField.newRangeQuery(name, forward(min), forward(max))
+        Query.of(FloatField.newRangeQuery(name, forward(min), forward(max)))
 
     def ascending: SortField =
         FloatField.newSortField(name, false, SortedNumericSelector.Type.MIN)

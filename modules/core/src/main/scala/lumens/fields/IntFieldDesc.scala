@@ -2,20 +2,20 @@ package lumens.fields
 
 import org.apache.lucene.index.IndexableField
 import org.apache.lucene.document.IntField
-import org.apache.lucene.search.Query
 import org.apache.lucene.search.SortField
 import org.apache.lucene.document.Document
 import org.apache.lucene.search.SortedNumericSelector
+import lumens.query.Query
 
 trait IntFieldDesc[Name <: String, A] extends FieldDesc[Name, A, Int]:
     def fieldBase(value: Int): IndexableField =
         IntField(name, value, store)
 
     def exact(value: A): Query =
-        IntField.newExactQuery(name, forward(value))
+        Query.of(IntField.newExactQuery(name, forward(value)))
 
     def range(min: A, max: A): Query =
-        IntField.newRangeQuery(name, forward(min), forward(max))
+        Query.of(IntField.newRangeQuery(name, forward(min), forward(max)))
 
     def ascending: SortField =
         IntField.newSortField(name, false, SortedNumericSelector.Type.MIN)

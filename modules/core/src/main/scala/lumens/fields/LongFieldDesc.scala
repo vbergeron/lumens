@@ -2,7 +2,7 @@ package lumens.fields
 
 import org.apache.lucene.index.IndexableField
 import org.apache.lucene.document.LongField
-import org.apache.lucene.search.Query
+import lumens.query.Query
 import org.apache.lucene.search.SortField
 import org.apache.lucene.document.Document
 import org.apache.lucene.search.SortedNumericSelector
@@ -12,10 +12,10 @@ trait LongFieldDesc[Name <: String, A] extends FieldDesc[Name, A, Long]:
         LongField(name, value, store)
 
     def exact(value: A): Query =
-        LongField.newExactQuery(name, forward(value))
+        Query.of(LongField.newExactQuery(name, forward(value)))
 
     def range(min: A, max: A): Query =
-        LongField.newRangeQuery(name, forward(min), forward(max))
+        Query.of(LongField.newRangeQuery(name, forward(min), forward(max)))
 
     def ascending: SortField =
         LongField.newSortField(name, false, SortedNumericSelector.Type.MIN)

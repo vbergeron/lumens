@@ -2,7 +2,7 @@ package lumens.fields
 
 import org.apache.lucene.index.IndexableField
 import org.apache.lucene.document.DoubleField
-import org.apache.lucene.search.Query
+import lumens.query.Query
 import org.apache.lucene.search.SortField
 import org.apache.lucene.document.Document
 import org.apache.lucene.search.SortedNumericSelector
@@ -12,10 +12,10 @@ trait DoubleFieldDesc[Name <: String, A] extends FieldDesc[Name, A, Double]:
         DoubleField(name, value, store)
 
     def exact(value: A): Query =
-        DoubleField.newExactQuery(name, forward(value))
+        Query.of(DoubleField.newExactQuery(name, forward(value)))
 
     def range(min: A, max: A): Query =
-        DoubleField.newRangeQuery(name, forward(min), forward(max))
+        Query.of(DoubleField.newRangeQuery(name, forward(min), forward(max)))
 
     def ascending: SortField =
         DoubleField.newSortField(name, false, SortedNumericSelector.Type.MIN)

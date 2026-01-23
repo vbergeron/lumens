@@ -2,9 +2,9 @@ package lumens.fields
 
 import org.apache.lucene.index.IndexableField
 import org.apache.lucene.document.KeywordField
-import org.apache.lucene.search.Query
 import org.apache.lucene.search.SortField
 import org.apache.lucene.search.SortedSetSelector
+import lumens.query.Query
 import org.apache.lucene.document.Document
 
 trait KeywordFieldDesc[Name <: String, A] extends FieldDesc[Name, A, String]:
@@ -12,7 +12,7 @@ trait KeywordFieldDesc[Name <: String, A] extends FieldDesc[Name, A, String]:
         KeywordField(name, value, store)
 
     def exact(value: A): Query =
-        KeywordField.newExactQuery(name, forward(value))
+        Query.of(KeywordField.newExactQuery(name, forward(value)))
 
     def ascending: SortField =
         KeywordField.newSortField(name, false, SortedSetSelector.Type.MIN)
