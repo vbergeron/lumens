@@ -36,7 +36,8 @@ object Query:
         def translate: LQuery                   = builder.build()
 
         private def aggQueries(queries: Seq[Query], occur: BooleanClause.Occur): LBooleanQuery.Builder =
-            queries.foldLeft(builder)((b, query) => b.add(query.translate, occur))
+            queries.foreach(query => builder.add(query.translate, occur))
+            builder
 
     /** Creates a new clauses query. */
     def clauses: Clauses = Clauses(new LBooleanQuery.Builder())
