@@ -10,6 +10,7 @@ import org.apache.lucene.index.Term
 import org.apache.lucene.document.KeywordField
 import org.apache.lucene.search.SortField
 import org.apache.lucene.search.SortedSetSelector
+import lumens.query.QueryOutput
 
 class ReadError(msg: String) extends Throwable(msg)
 
@@ -31,6 +32,8 @@ trait PersistentFieldDesc[Name <: String, A, Base] extends FieldDesc[Name, A, Ba
 
     def read(doc: Document): Either[Throwable, A] =
         readBase(doc).flatMap(backward)
+
+    def output: QueryOutput[A] = QueryOutput(this)
 
 object FieldDesc:
     // Keyword field constructors
